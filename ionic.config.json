@@ -1,0 +1,7 @@
+{
+  "name": "hayago_planner",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
