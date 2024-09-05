@@ -233,7 +233,7 @@ const syncWaypointsToFirebase = () => {
 };
 
 const updateWaypointPosition = (event: any, index: number) => {
-  const { lat, lng } = event.target.getLatLng();
+  const { lat, lng } = event.target.getLatLng(); // Get the new position after dragging
   waypoints.value[index].lat = lat;
   waypoints.value[index].lng = lng;
   
