@@ -54,7 +54,7 @@
               </select>
             </div>
             <div>
-              <button @click="toggleMotor()" class="btn bg-blue-700 hover:bg-base-600 text-white">{{ motorOneStats ? 'Stop' : 'Run' }}</button>
+              <button class="btn bg-blue-700 hover:bg-base-600 text-white">Connect</button>
             </div>
           </div>
         </div>
@@ -177,15 +177,22 @@ const waypointCoords = computed(() => {
   return waypoints.value.map(waypoint => [waypoint.lat, waypoint.lng]);
 });
 const vehicleDataRef = dbRef(database, 'vehicleData');
-const motorOne = dbRef(database, 'motor/1/active')
-const motorOneStats = ref(false)
+const videoRef = ref(null)
 
 onMounted(() => {
-  onValue(motorOne, (snapshot) => {
-    if(snapshot.exists()) {
-      motorOneStats.value = snapshot.val()
-    }
-  })
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({video: true})
+    .then((stream) => {
+      const videoElement: any = videoRef.value
+      if (videoElement) {
+        videoElement.srcObject = stream
+        videoElement.play()
+      }
+    })
+    .catch((error) => {
+        console.error("Error accessing the camera: ", error);
+      });
+  }
   onValue(waypointsRef, (snapshot) => {
     const data = snapshot.val();
 
@@ -225,11 +232,6 @@ const addWaypoint = (e: any) => {
   waypoints.value.push(newWaypoint);
   syncWaypointsToFirebase()
 };
-
-const toggleMotor = () => {
-  motorOneStats.value = !motorOneStats.value
-  set(motorOne, motorOneStats.value)
-}
 
 const syncWaypointsToFirebase = () => {
   const waypointsData = waypoints.value.reduce((acc: any, waypoint, index) => {

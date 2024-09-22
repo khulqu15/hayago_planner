@@ -228,7 +228,7 @@ const addWaypoint = (e: any) => {
 
 const toggleMotor = () => {
   motorOneStats.value = !motorOneStats.value
-  set(motorOne, motorOneStats.value)
+  set(motorOne, motorOneStats)
 }
 
 const syncWaypointsToFirebase = () => {

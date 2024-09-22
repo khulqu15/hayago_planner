@@ -54,7 +54,7 @@
               </select>
             </div>
             <div>
-              <button @click="toggleMotor()" class="btn bg-blue-700 hover:bg-base-600 text-white">{{ motorOneStats ? 'Stop' : 'Run' }}</button>
+              <button class="btn bg-blue-700 hover:bg-base-600 text-white">Run</button>
             </div>
           </div>
         </div>
@@ -178,14 +178,8 @@ const waypointCoords = computed(() => {
 });
 const vehicleDataRef = dbRef(database, 'vehicleData');
 const motorOne = dbRef(database, 'motor/1/active')
-const motorOneStats = ref(false)
 
 onMounted(() => {
-  onValue(motorOne, (snapshot) => {
-    if(snapshot.exists()) {
-      motorOneStats.value = snapshot.val()
-    }
-  })
   onValue(waypointsRef, (snapshot) => {
     const data = snapshot.val();
 
@@ -225,11 +219,6 @@ const addWaypoint = (e: any) => {
   waypoints.value.push(newWaypoint);
   syncWaypointsToFirebase()
 };
-
-const toggleMotor = () => {
-  motorOneStats.value = !motorOneStats.value
-  set(motorOne, motorOneStats.value)
-}
 
 const syncWaypointsToFirebase = () => {
   const waypointsData = waypoints.value.reduce((acc: any, waypoint, index) => {

@@ -182,9 +182,7 @@ const motorOneStats = ref(false)
 
 onMounted(() => {
   onValue(motorOne, (snapshot) => {
-    if(snapshot.exists()) {
-      motorOneStats.value = snapshot.val()
-    }
+    if(snapshot.exists()) motorOneStats.value = snapshot.val()
   })
   onValue(waypointsRef, (snapshot) => {
     const data = snapshot.val();
@@ -228,7 +226,7 @@ const addWaypoint = (e: any) => {
 
 const toggleMotor = () => {
   motorOneStats.value = !motorOneStats.value
-  set(motorOne, motorOneStats.value)
+  set(motorOne, motorOneStats)
 }
 
 const syncWaypointsToFirebase = () => {
